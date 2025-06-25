@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Electrode Counter</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #d3f6d3;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .header-left {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-left img {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+    }
+
+    .header-left h2 {
+      margin: 0;
+      color: #00A550;
+      font-size: 22px;
+    }
+
+    .login-box {
+      background: #ffffff;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .login-box h2 {
+      margin-bottom: 25px;
+      color: #333333;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .show-password {
+      margin-top: -10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #00A550;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #008d43;
+    }
+
+    #error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      .login-box {
+        padding: 30px 20px;
+      }
+
+      .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        top: 10px;
+        left: 10px;
+      }
+
+      .header-left h2 {
+        font-size: 18px;
+      }
+
+      .header-left img {
+        width: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top-left logo + name -->
+  <div class="header-left">
+    <img src="logo.png" alt="Electrode Counter Logo">
+    <h2>E.S.HAJI & CO</h2>
+  </div>
+
+  <!-- Login Box -->
+  <div class="login-box">
+    <h2>Login to Electrode Counter</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Enter Username" required>
+      <input type="password" id="password" placeholder="Enter Password" required>
+      <div class="show-password">
+  <label class="checkbox-container">
+    <input type="checkbox" id="togglePassword">
+    <span class="checkmark"></span>
+    Show Password
+  </label>
+</div>
+
+      <button type="submit">Login</button>
+    </form>
+    <p id="error"></p>
+  </div>
+
+  <script>
+    const users = [
+      { username: "admin", password: "1234" },
+      { username: "john", password: "Clairesha" },
+      { username: "preethi", password: "1234" },
+      { username: "surjith", password: "1234" },
+      { username: "hemnath", password: "1234" },
+      { username: "ajay", password: "1234" }
+    ];
+
+    // Handle form submit (includes pressing Enter)
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // Prevent page reload
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      const match = users.find(user => user.username === username && user.password === password);
+
+      if (match) {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "dashboard.html";
+      } else {
+        document.getElementById("error").textContent = "Invalid username or password.";
+      }
+    });
+
+    // Show/hide password functionality
+    document.getElementById("togglePassword").addEventListener("change", function() {
+      const passwordInput = document.getElementById("password");
+      passwordInput.type = this.checked ? "text" : "password";
+    });
+  </script>
+
+</body>
+</html>

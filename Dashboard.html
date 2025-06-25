@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ELECTRODE COUNTER</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Login guard (check only localStorage)
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body>
+  <div class="header-left">
+    <img src="logo.png" alt="Electrode Counter Logo">
+    <h2>E.S.HAJI & CO</h2>
+  </div>
+
+
+  <div>
+    <h1>ELECTRODE COUNT DASHBOARD</h1>
+
+    <table id="countTable">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Name</th>
+          <th>UID</th>
+          <th>Objects</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data from Google Sheet will appear here -->
+      </tbody>
+    </table>
+  </div>
+
+  <button id="logoutBtn" onclick="logout()">Logout</button>
+
+  <script>
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/22PACX-1vSKYFwIiZXiy3Y1ny8pm5nCN64o-Praml-wbaJfKSVCSCF4DbpeEQHEaktNFUGYxKQqeRW6sez6dKId/pub?output=csv";
+
+    async function fetchData() {
+      try {
+        const response = await fetch(sheetURL);
+        const data = await response.text();
+
+        const rows = data
+          .trim()
+          .split("\n")
+          .slice(1) // Skip header
+          .filter(row => row.trim() !== "");
+
+        const tableBody = document.querySelector("#countTable tbody");
+        tableBody.replaceChildren();
+
+        rows.reverse().slice(0, 10).forEach(row => {
+          const columns = row.split(",");
+          const tr = document.createElement("tr");
+
+          columns.forEach(col => {
+            const td = document.createElement("td");
+            td.textContent = col.trim();
+            tr.appendChild(td);
+          });
+
+          tableBody.appendChild(tr);
+        });
+
+      } catch (error) {
+        console.error("Error fetching Google Sheet data:", error);
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "login.html";
+    }
+
+    fetchData();
+  </script>
+</body>
+</html>
